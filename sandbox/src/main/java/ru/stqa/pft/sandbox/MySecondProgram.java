@@ -7,7 +7,7 @@ public class MySecondProgram {
         p1.x = 1;
         p1.y = 1;
         p2.x = 4;
-        p2.y = 6;
+        p2.y = 5;
 
         System.out.println("Distance between p1 and p2 = " + p1.distance(p2));
     }
