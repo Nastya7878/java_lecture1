@@ -1,24 +1,22 @@
-package ru.stqa.pft.newcontact;
+package ru.stqa.pft.newcontact.contmanager;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
+import ru.stqa.pft.newcontact.model1.ContactData;
 
 import java.util.concurrent.TimeUnit;
 
 import static org.testng.Assert.assertTrue;
 
-public class ContactBase {
-    protected WebDriver wd;
-    protected boolean acceptNextAlert = true;
+public class ContactManager {
+    public WebDriver wd;
+    public boolean acceptNextAlert = true;
 
-    @BeforeMethod(alwaysRun = true)
-    public void setUp() throws Exception {
-      wd = new FirefoxDriver();
-      wd.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-      wd.get("http://localhost/addressbook/delete.php?part=5;");
-      Login("admin", "secret");
+    public void init() {
+        wd = new FirefoxDriver();
+        wd.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+        wd.get("http://localhost/addressbook/delete.php?part=5;");
+        Login("admin", "secret");
     }
 
     private void Login(String username, String password) {
@@ -31,19 +29,19 @@ public class ContactBase {
       wd.findElement(By.xpath("//input[@value='Login']")).click();
     }
 
-    protected void Logout() {
+    public void Logout() {
       wd.findElement(By.linkText("Logout")).click();
     }
 
-    protected void returnToHomepage() {
+    public void returnToHomepage() {
       wd.findElement(By.linkText("home")).click();
     }
 
-    protected void submitContactCreation() {
+    public void submitContactCreation() {
       wd.findElement(By.xpath("(//input[@name='submit'])[2]")).click();
     }
 
-    protected void fillContactForm(ContactData contactData) {
+    public void fillContactForm(ContactData contactData) {
       wd.findElement(By.name("firstname")).click();
       wd.findElement(By.name("firstname")).clear();
       wd.findElement(By.name("firstname")).sendKeys(contactData.getFirstname());
@@ -61,24 +59,23 @@ public class ContactBase {
       wd.findElement(By.name("email")).sendKeys(contactData.getEmail());
     }
 
-    protected void gotoNewContactPage() {
+    public void gotoNewContactPage() {
       wd.findElement(By.linkText("add new")).click();
     }
 
-    protected void deleteSelectedContact() {
+    public void deleteSelectedContact() {
       wd.findElement(By.xpath("//input[@value='Delete']")).click();
     }
 
-    protected void selectContact() {
+    public void selectContact() {
         wd.findElement(By.name("selected[]")).click();
     }
 
-
-    protected void gotoHomePage() {
+    public void gotoHomePage() {
       wd.findElement(By.linkText("home")).click();
     }
 
-    protected void returnHomePage() {
+    public void returnHomePage() {
       wd.findElement(By.xpath("//div[@id='header']/a")).click();
     }
 
@@ -99,12 +96,12 @@ public class ContactBase {
         return false;
       }
     }
-    @AfterMethod(alwaysRun = true)
-    public void tearDown() throws Exception {
+
+    public void stop() {
         wd.quit();
     }
 
-    protected String closeAlertAndGetItsText() {
+    public String closeAlertAndGetItsText() {
       try {
         Alert alert = wd.switchTo().alert();
         String alertText = alert.getText();
@@ -119,7 +116,7 @@ public class ContactBase {
       }
     }
 
-    protected void AlertAndGetItsText() {
+    public void AlertAndGetItsText() {
       assertTrue(closeAlertAndGetItsText().matches("^Delete 1 addresses[\\s\\S]$"));
     }
 }

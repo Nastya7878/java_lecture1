@@ -1,4 +1,4 @@
-package ru.stqa.pft.newcontact;
+package ru.stqa.pft.newcontact.model1;
 
 public class ContactData {
     private final String firstname;
