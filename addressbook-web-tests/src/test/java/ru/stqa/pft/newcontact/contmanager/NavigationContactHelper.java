@@ -3,14 +3,14 @@ package ru.stqa.pft.newcontact.contmanager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-public class NavigationContactHelper {
-    private WebDriver wd;
+public class NavigationContactHelper extends HelperBase{
 
     public NavigationContactHelper(WebDriver wd) {
-        this.wd = wd;
+        super(wd);
     }
 
     public void gotoHomePage() {
-      wd.findElement(By.linkText("home")).click();
+
+        click(By.linkText("home"));
     }
 }
