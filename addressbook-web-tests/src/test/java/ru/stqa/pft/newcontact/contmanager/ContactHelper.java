@@ -33,6 +33,8 @@ public class ContactHelper extends HelperBase{
     }
 
     public void selectContact() {
-        click( By.name("selected[]") );
+        click( By.xpath("selected[]") );
     }
+
 }
+

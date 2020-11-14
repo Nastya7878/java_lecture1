@@ -10,7 +10,6 @@ public class NavigationContactHelper extends HelperBase{
     }
 
     public void gotoHomePage() {
-
         click(By.linkText("home"));
     }
 }

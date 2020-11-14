@@ -1,6 +1,9 @@
 package ru.stqa.pft.newcontact.contmanager;
 
-import org.openqa.selenium.*;
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 import java.util.concurrent.TimeUnit;
@@ -38,6 +41,7 @@ public class ContactManager {
       wd.findElement(By.xpath("//div[@id='header']/a")).click();
     }
 
+
     private boolean isElementPresent(By by) {
       try {
         wd.findElement(by);
@@ -47,14 +51,6 @@ public class ContactManager {
       }
     }
 
-    private boolean isAlertPresent() {
-      try {
-        wd.switchTo().alert();
-        return true;
-      } catch (NoAlertPresentException e) {
-        return false;
-      }
-    }
 
     public void stop() {
         wd.quit();

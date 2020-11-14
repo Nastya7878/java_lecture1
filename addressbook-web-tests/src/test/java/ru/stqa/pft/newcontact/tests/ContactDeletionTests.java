@@ -2,7 +2,7 @@ package ru.stqa.pft.newcontact.tests;
 
 import org.testng.annotations.Test;
 
-public class ContactDeletionTests extends ContactBase {
+public class ContactDeletionTests extends ContactBase{
 
 
 
