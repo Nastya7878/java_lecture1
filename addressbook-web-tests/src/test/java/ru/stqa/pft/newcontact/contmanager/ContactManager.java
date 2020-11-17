@@ -4,22 +4,40 @@ import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.remote.BrowserType;
 
 import java.util.concurrent.TimeUnit;
 
 import static org.testng.Assert.assertTrue;
 
 public class ContactManager {
+    WebDriver wd;
+
+    private String browser;
     private SessionHelper sessionHelper;
     private NavigationContactHelper navigationContactHelper;
     private ContactHelper contactHelper;
     public boolean acceptNextAlert = true;
-    public WebDriver wd;
+
+
+    public ContactManager(String browser) {
+        this.browser = browser;
+    }
 
 
     public void init() {
-        wd= new FirefoxDriver();
+
+        if (browser.equals(BrowserType.FIREFOX)) {
+            wd = new FirefoxDriver();
+        } else if (browser.equals (BrowserType.CHROME)) {
+            wd = new ChromeDriver();
+        } else if (browser.equals( BrowserType.IE)) {
+            wd = new InternetExplorerDriver();
+        }
+
         wd.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
         wd.get("http://localhost/addressbook/delete.php?part=5;");
         contactHelper=new ContactHelper(wd);
@@ -82,4 +100,6 @@ public class ContactManager {
     public NavigationContactHelper getNavigationContactHelper() {
         return navigationContactHelper;
     }
+
+
 }
