@@ -10,6 +10,8 @@ import ru.stqa.pft.newcontact.model1.ContactData;
 
 public class ContactHelper extends HelperBase {
 
+    private ContactData contact;
+
     public ContactHelper(WebDriver wd) {
         super( wd );
     }
@@ -23,6 +25,11 @@ public class ContactHelper extends HelperBase {
         click( By.xpath( "(//input[@name='submit'])[2]" ) );
     }
 
+    public void gotoNewContactPage() {
+        wd.findElement( By.linkText( "add new" ) ).click();
+    }
+
+
     public void fillContactForm(ContactData contactData, boolean creation) {
 
         type( By.name( "firstname" ), contactData.getFirstname() );
@@ -31,25 +38,49 @@ public class ContactHelper extends HelperBase {
         type( By.name( "mobile" ), contactData.getPhone() );
         type( By.name( "email" ), contactData.getEmail() );
 
-        findNew_group( By.name( "new_group" ));
+        findNew_group( By.name( "new_group" ) );
 
         if (creation) {
-            new Select ( wd.findElement(By.name("new_group")) ).selectByVisibleText( "test 11" );
+            new Select( wd.findElement( By.name( "new_group" ) ) ).selectByVisibleText( "test 11" );
         } else {
             Assert.assertFalse( findNew_group( By.name( "new_group" ) ) );
         }
     }
 
 
-    public void initContactModification() {  click( By.cssSelector( "img[alt=\"Edit\"]" ) );  }
-
-    public void submitContactModification() {
-        click ( By.xpath("(//input[@name='update'])[2]"));
+    public void initContactModification() {
+        click( By.cssSelector( "img[alt=\"Edit\"]" ) );
     }
 
-    public void selectContact() { click( By.name("selected[]") ); }
+    public void submitContactModification() {
+        click( By.xpath( "(//input[@name='update'])[2]" ) );
+    }
 
-    public void deleteSelectedContact () { click( By.xpath( "//input[@value='Delete']" ) );  }
+    public void selectContact() {
+        click( By.name( "selected[]" ) );
+    }
+
+    public void deleteSelectedContact() {
+        click( By.xpath( "//input[@value='Delete']" ) );
+    }
+
+
+    public boolean isThereAGroup() {
+        return isElementPresent( By.name( "selected[]" ) );
+    }
+
+    public void createContact(ContactData contactData, boolean creation) {
+        gotoNewContactPage();
+        fillContactForm (new ContactData( "Anastasia", "Verem", "Minsk", "+375298641245", "babaVera@tut.by", "test11" ), true );
+        submitContactCreation();
+        returnToHomepage();
+    }
 }
+
+
+
+
+
+
 
 
