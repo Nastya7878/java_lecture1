@@ -4,18 +4,19 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 
 public class HelperBase {
     protected WebDriver wd;
+    private By locator;
 
     public HelperBase(WebDriver wd) {
         this.wd = wd;
     }
 
     protected void click(By locator) {
-        wd.findElement(locator).click();
+        locator.findElement( wd ).click();
     }
+
 
     protected void type(By locator, String text) {
         click( locator );
@@ -23,11 +24,9 @@ public class HelperBase {
             String existingText=wd.findElement( locator ).getAttribute( "value" );
             if (!text.equals( existingText )) {
                 wd.findElement( locator ).clear();
-                wd.findElement( locator ).sendKeys( text );
-            }
+                wd.findElement( locator ).sendKeys( text ); }
         }
     }
-
 
     public boolean isAlertPresent() {
         try {
@@ -39,8 +38,9 @@ public class HelperBase {
     }
 
     public void gotoGroupPage() {
-      wd.findElement(By.linkText("groups")).click();
-    }
+      wd.findElement(By.linkText("group page")).click(); }
+
+
 
     protected boolean isElementPresent(By by) {
         try {
@@ -50,6 +50,12 @@ public class HelperBase {
             return false;
         }
     }
+
+    public boolean isThereAGroup() {
+        return isElementPresent( By.name( "selected[]" ) );
+    }
 }
+
+
 
 

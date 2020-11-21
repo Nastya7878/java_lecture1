@@ -17,9 +17,7 @@ public class GroupHelper extends HelperBase {
         type(By.name("group_footer"), groupData.getFooter());
     }
 
-    public void initGroupCreation() {
-        click(By.name("new"));
-    }
+    public void initGroupCreation() { click(By.name("new"));  }
 
     public void deleteSelectedGroups() {
         click(By.xpath("(//input[@name='delete'])[2]"));
@@ -35,5 +33,17 @@ public class GroupHelper extends HelperBase {
 
     public void submitGroupModification() {
         click(By.name("update"));
+    }
+
+
+    public void createGroup(GroupData group) {
+        initGroupCreation();
+        fillGroupForm(group);
+        submitGroupCreation();
+        gotoGroupPage();
+    }
+
+    public boolean isThereAGroup() {
+        return isElementPresent( By.name("selected[]"));
     }
 }
