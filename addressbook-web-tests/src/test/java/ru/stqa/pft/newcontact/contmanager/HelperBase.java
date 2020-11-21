@@ -2,13 +2,14 @@ package ru.stqa.pft.newcontact.contmanager;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoAlertPresentException;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 
 public class HelperBase {
     protected WebDriver wd;
 
     public HelperBase(WebDriver wd) {
-        this.wd = wd;
+        this.wd=wd;
     }
 
     protected void click(By locator) {
@@ -34,5 +35,16 @@ public class HelperBase {
             return false;
         }
     }
+
+    public boolean findNew_group(By locator) {
+        try {
+            wd.findElement( By.name( "new_group" ) );
+            return true;
+        } catch (NoSuchElementException ex) {
+            return false;
+        }
+    }
 }
+
+
 
