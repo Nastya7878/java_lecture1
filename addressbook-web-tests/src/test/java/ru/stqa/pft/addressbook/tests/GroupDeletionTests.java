@@ -3,6 +3,7 @@ package ru.stqa.pft.addressbook.tests;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.GroupData;
+import ru.stqa.pft.addressbook.appmanager.GroupHelper;
 
 public class GroupDeletionTests extends TestBase {
 
@@ -10,16 +11,24 @@ public class GroupDeletionTests extends TestBase {
     @Test
     public void testGroupDeletion() {
         app.getNavigationHelper().gotoGroupPage();
-        int before=app.getGroupHelper().getGroupCount();
-        if (! app.getGroupHelper().isThereAGroup()) {
-            app.getGroupHelper().createGroup( new GroupData( "test 1", "null", "null" ) );
-            app.getGroupHelper().selectGroup();
-            app.getGroupHelper().deleteSelectedGroups();
-            app.getNavigationHelper().gotoGroupPage();
-            int after=app.getGroupHelper().getGroupCount();
-            Assert.assertEquals( after, before - 1 );
+        GroupHelper groupHelper = app.getGroupHelper();
+        int beforeTest= groupHelper.getGroupCount();
 
-        }
+
+        groupHelper.createGroup( new GroupData("test N1", "null", "null" ) );
+
+        app.getNavigationHelper().gotoGroupPage();
+        int afterAddingTest= groupHelper.getGroupCount();
+        Assert.assertEquals( beforeTest + 1, afterAddingTest);
+
+
+        groupHelper.selectGroup();
+        groupHelper.deleteSelectedGroups();
+
+        app.getNavigationHelper().gotoGroupPage();
+
+        int afterTest = groupHelper.getGroupCount();
+        Assert.assertEquals( beforeTest, afterTest);
     }
 }
 

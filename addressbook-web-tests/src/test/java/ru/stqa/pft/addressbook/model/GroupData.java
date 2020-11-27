@@ -11,9 +11,7 @@ public class GroupData {
         this.footer = footer;
     }
 
-    public String getName() {
-        return name;
-    }
+    public String getName() { return name;  }
 
     public String getHeader() {
         return header;
@@ -23,3 +21,4 @@ public class GroupData {
         return footer;
     }
 }
+

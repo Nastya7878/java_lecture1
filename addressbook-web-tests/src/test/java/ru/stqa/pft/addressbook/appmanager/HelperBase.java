@@ -7,18 +7,20 @@ import org.openqa.selenium.WebDriver;
 
 public class HelperBase {
     protected WebDriver wd;
-    private By locator;
+
 
     public HelperBase(WebDriver wd) {
         this.wd = wd;
     }
 
-    protected void click(By locator) {
-        locator.findElement( wd ).click();
+    public void click(By locator) {
+        wd.findElement(locator).click();
     }
 
+    public void click() { wd.findElement(By.name("new")).click ();}
 
-    protected void type(By locator, String text) {
+
+    public void type(By locator, String text) {
         click( locator );
         if (text != null) {
             String existingText=wd.findElement( locator ).getAttribute( "value" );
@@ -38,7 +40,8 @@ public class HelperBase {
     }
 
     public void gotoGroupPage() {
-      wd.findElement(By.linkText("group page")).click(); }
+      wd.findElement(By.linkText("group page")).click();
+    }
 
 
 
@@ -49,10 +52,6 @@ public class HelperBase {
         } catch (NoSuchElementException e) {
             return false;
         }
-    }
-
-    public boolean isThereAGroup() {
-        return isElementPresent( By.name( "selected[]" ) );
     }
 }
 
