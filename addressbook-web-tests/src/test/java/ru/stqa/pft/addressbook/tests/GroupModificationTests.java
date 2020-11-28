@@ -10,30 +10,21 @@ public class GroupModificationTests extends TestBase {
     @Test
     public void testGroupModification() {
         app.getNavigationHelper().gotoGroupPage();
-        int beforeTest = app.getGroupHelper().getGroupCount();
-
+        int before = app.getGroupHelper().getGroupCount();
         GroupHelper groupHelper = app.getGroupHelper();
 
-        boolean isGroupCreated = false;
         if (!groupHelper.isThereAGroup()) {
             groupHelper.createGroup( new GroupData( "test 1", "null", "null" ) );
-            isGroupCreated = true;
-        }
+            }
 
-        groupHelper.selectGroup();
+        groupHelper.selectGroup(before - 1);
         groupHelper.initGroupModification();
         groupHelper.fillGroupForm(new GroupData( "test 11", "test 12", "test 13" ) );
         groupHelper.submitGroupModification();
         app.getNavigationHelper().gotoGroupPage();
 
-        if(isGroupCreated)
-        {
-            groupHelper.selectGroup();
-            groupHelper.deleteSelectedGroups();
-        }
-
-        int afterTest = groupHelper.getGroupCount();
-        Assert.assertEquals(afterTest, beforeTest);
+        int after = groupHelper.getGroupCount();
+        Assert.assertEquals(after, before );
     }
 }
 
