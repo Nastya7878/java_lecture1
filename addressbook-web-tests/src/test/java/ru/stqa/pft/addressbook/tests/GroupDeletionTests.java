@@ -10,6 +10,8 @@ import java.util.List;
 public class GroupDeletionTests extends TestBase {
 
 
+    private int i;
+
     @Test
     public void testGroupDeletion() {
         app.getNavigationHelper().gotoGroupPage();
@@ -26,7 +28,14 @@ public class GroupDeletionTests extends TestBase {
 
         List<GroupData> after = groupHelper.getGroupList();
         Assert.assertEquals( after.size(), before.size() - 1);
+
+
+        before.remove(before.size() - 1);
+        Assert.assertEquals( before, after);
+        }
+
     }
-}
+
+
 
 
