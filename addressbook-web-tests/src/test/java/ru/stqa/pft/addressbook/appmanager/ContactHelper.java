@@ -16,14 +16,13 @@ import java.util.List;
 public class ContactHelper extends HelperBase {
 
 
-
     public ContactHelper(WebDriver wd) {
         super( wd );
     }
 
     public int getContactCount() {
         return wd.findElements( By.name( "selected[]" ) ).size();
-           }
+    }
 
 
     public void returnToHomepage() {
@@ -39,33 +38,6 @@ public class ContactHelper extends HelperBase {
     }
 
 
-    public void fillContactForm(ContactData contactData, boolean creation) {
-
-        type( By.name( "firstname" ), contactData.getFirstname() );
-        type( By.name( "lastname" ), contactData.getSurname() );
-        type( By.name( "address" ), contactData.getAddress() );
-        type( By.name( "mobile" ), contactData.getPhone() );
-        type( By.name( "email" ), contactData.getEmail() );
-
-        findNew_group( By.name( "new_group" ) );
-
-        if (creation) {
-            new Select( wd.findElement( By.name( "new_group" ) ) ).selectByVisibleText( "test 1" );
-        } else {
-            Assert.assertFalse( findNew_group( By.name( "new_group" ) ) );
-        }
-    }
-
-    public boolean findNew_group(By locator) {
-        try {
-            wd.findElement( locator );
-            return true;
-        } catch (NoSuchElementException ex) {
-            return false;
-        }
-    }
-
-
     public void initContactModification() {
         click( By.cssSelector( "img[alt=\"Edit\"]" ) );
     }
@@ -75,10 +47,8 @@ public class ContactHelper extends HelperBase {
     }
 
     public void selectContact(int index) {
-        wd.findElements( By.name( "selected[]" ) ).get(index).click();
+        wd.findElements( By.name( "selected[]" ) ).get( index ).click();
     }
-
-
 
 
     public void deleteSelectedContact() {
@@ -97,16 +67,53 @@ public class ContactHelper extends HelperBase {
         returnToHomepage();
     }
 
+    @Override
+    public String toString() {
+        return "ContactHelper{}";
+    }
+
     public List<ContactData> getContactList() {
-        List<ContactData> contacts = new ArrayList < ContactData >();
-        List<WebElement> elements =wd.findElements(By.cssSelector( "tr.odd" ));
-        for (WebElement element : elements)  {
-            String name = element.getText();
-            ContactData contact = new ContactData ("Anastasia", "Verem", null, null, null, null);
+        List<ContactData> contacts=new ArrayList<ContactData>();
+        List<WebElement> elements=wd.findElements( By.cssSelector( "tr[name='entry']"));
+        for (WebElement element : elements) {
+            String surname=element.getText().split(" ")[0];
+            String firstname=element.getText().split(" ")[1];
+            String id=element.findElement( By.tagName( "input" ) ).getAttribute( "value" );
+            ContactData contact=new ContactData( id, surname, firstname,  null, null, null, null );
             contacts.add( contact );
         }
         return contacts;
     }
+
+    public void fillContactForm(ContactData contact, boolean creation) {
+
+        type( By.name( "firstname" ), contact.getFirstname() );
+        type( By.name( "lastname" ), contact.getSurname() );
+        type( By.name( "address" ), contact.getAddress() );
+        type( By.name( "mobile" ), contact.getPhone() );
+        type( By.name( "email" ), contact.getEmail() );
+
+        findNew_group( By.name( "new_group" ) );
+
+        if (creation) {
+            new Select( wd.findElement( By.name( "new_group" ) ) ).selectByVisibleText( "test 1" );
+        } else {
+            Assert.assertFalse( findNew_group( By.name( "new_group" ) ) );
+        }
+    }
+
+    public boolean findNew_group(By locator) {
+        try {
+            wd.findElement( locator );
+            return true;
+        } catch (NoSuchElementException ex) {
+            return false;
+        }
+    }
 }
+
+
+
+
 
 
