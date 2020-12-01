@@ -43,7 +43,7 @@ public class GroupHelper extends HelperBase {
     }
 
     public void selectGroupByText(String linkText) {
-        //WebElement userName = driver.findElement(By.xpath(".//*[text()='Первая ссылка']/.."));
+        WebElement userName = wd.findElement(By.xpath(".//*[text()='Первая ссылка']/.."));
         click( By.linkText( linkText ) );
     }
 
@@ -116,7 +116,7 @@ public class GroupHelper extends HelperBase {
         List<WebElement> elements =wd.findElements(By.cssSelector( "span.group" ));
         for (WebElement element : elements) {
             String name = element.getText();
-            String id = element.findElement( By.tagName("input")).getAttribute( "value" );
+            int id = Integer.parseInt( element.findElement( By.tagName("input")).getAttribute( "value" ));
             GroupData group = new GroupData( id, name, null, null );
             groups.add( group );
         }
