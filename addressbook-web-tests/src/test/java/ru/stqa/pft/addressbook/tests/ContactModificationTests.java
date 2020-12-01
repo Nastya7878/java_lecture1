@@ -26,7 +26,7 @@ public class ContactModificationTests extends TestBase {
         contactHelper.selectContact(before.size() - 1);
         app.acceptNextAlert=true;
         contactHelper.initContactModification();
-        ContactData contact = new ContactData ( "1", "Callous", "Maria", "Milan", "+375292525258", "Milana@tut.by", "null");
+        ContactData contact = new ContactData (  "Callous", "Maria", "Milan", "+375292525258", "Milana@tut.by", "null");
         contactHelper.fillContactForm(contact, false);
         contactHelper.submitContactModification();
         contactHelper.returnToHomepage();
@@ -35,6 +35,7 @@ public class ContactModificationTests extends TestBase {
 
         before.remove(before.size() - 1);
         before.add( contact );
+
         Assert.assertEquals( new HashSet<Object>(before),  new HashSet<Object>(after));
 
     }
