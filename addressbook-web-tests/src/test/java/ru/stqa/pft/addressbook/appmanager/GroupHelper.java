@@ -15,6 +15,8 @@ import java.util.List;
 
 public class GroupHelper extends HelperBase {
 
+
+
     public GroupHelper(WebDriver wd) {
         super( wd );
     }
@@ -60,6 +62,14 @@ public class GroupHelper extends HelperBase {
         initGroupCreation();
         fillGroupForm( group );
         submitGroupCreation();
+    }
+
+    public void modifyGroup(GroupHelper groupHelper, int index, GroupData group) {
+        selectGroup( index );
+        initGroupModification();
+        fillGroupForm( group );
+        submitGroupModification();
+        gotoGroupPage();
     }
 
 
@@ -121,6 +131,15 @@ public class GroupHelper extends HelperBase {
             groups.add( group );
         }
         return groups;
+    }
+
+    public void gotoGroupPage() {
+        if (!isElementPresent( By.tagName( "h1" ) )
+                && wd.findElement( By.tagName( "h1" ) ).getText().equals( "Groups" )
+                && !isElementPresent( By.tagName( "new" ) )) {
+            return;
+        }
+        click( By.linkText( "groups" ) );
     }
 }
 
