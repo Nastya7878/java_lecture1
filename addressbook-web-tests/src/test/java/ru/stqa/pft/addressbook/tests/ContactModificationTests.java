@@ -15,7 +15,7 @@ public class ContactModificationTests extends TestBase {
     private ContactHelper contactHelper;
 
 
-    @Test
+    @Test (enabled=false)
     public void testContactModification() {
         this.contactHelper =this.getApp().getContactHelper();
         app.getNavigationHelper().gotoHomePage();

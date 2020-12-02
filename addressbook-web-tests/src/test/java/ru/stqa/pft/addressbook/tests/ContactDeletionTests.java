@@ -14,7 +14,7 @@ public class ContactDeletionTests extends TestBase {
 
 
 
-  @Test
+  @Test (enabled=false)
   public void testContactDeletion() throws Exception {
     this.contactHelper=this.getApp().getContactHelper();
 
