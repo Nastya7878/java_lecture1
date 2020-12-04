@@ -16,7 +16,7 @@ public class GroupDeletionTests extends TestBase {
         app.goTo().groupPage();
         GroupHelper groupHelper=app.group();
         if (groupHelper.list().size()== 0) {
-            groupHelper.create( new GroupData( "test1", "null", "null" ) );
+            groupHelper.create( new GroupData().withName( "test1" ) );
         }
     }
 

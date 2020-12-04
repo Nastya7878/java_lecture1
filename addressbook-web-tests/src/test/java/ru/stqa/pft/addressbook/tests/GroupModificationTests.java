@@ -16,7 +16,7 @@ public class GroupModificationTests extends TestBase {
         app.goTo().groupPage();
         GroupHelper groupHelper=app.group();
         if (groupHelper.list().size()== 0) {
-            groupHelper.create( new GroupData( "test1", "null", "null" ) );
+            groupHelper.create( new GroupData().withName( "test1" ) );
         }
     }
 
@@ -26,7 +26,8 @@ public class GroupModificationTests extends TestBase {
 
         List<GroupData> before=groupHelper.list();
         int index=before.size() - 1;
-        GroupData group=new GroupData( before.get( index ).getId(), "test1", "test2", "test3" );
+        GroupData group=new GroupData()
+                .withId( before.get( index ).getId()).withName("test1").withHeader("test2").withFooter( "test3" );
         groupHelper.modify( groupHelper, index, group );
         List<GroupData> after=groupHelper.list();
         Assert.assertEquals( after.size(), before.size() );
