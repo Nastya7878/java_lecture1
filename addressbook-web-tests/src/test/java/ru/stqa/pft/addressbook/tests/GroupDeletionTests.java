@@ -6,7 +6,7 @@ import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.appmanager.GroupHelper;
 import ru.stqa.pft.addressbook.model.GroupData;
 
-import java.util.List;
+import java.util.Set;
 
 public class GroupDeletionTests extends TestBase {
     private int i;
@@ -15,7 +15,7 @@ public class GroupDeletionTests extends TestBase {
     public void ensurePreconditions() {
         app.goTo().groupPage();
         GroupHelper groupHelper=app.group();
-        if (groupHelper.list().size()== 0) {
+        if (groupHelper.all().size()== 0) {
             groupHelper.create( new GroupData().withName( "test1" ) );
         }
     }
@@ -23,18 +23,18 @@ public class GroupDeletionTests extends TestBase {
     @Test
     public void testGroupDeletion() {
         GroupHelper groupHelper=app.group();
-        List<GroupData> before=groupHelper.list();
-        int index = before.size() - 1;
-        groupHelper.delete( groupHelper, index );
+        Set<GroupData> before=groupHelper.all();
+        GroupData deletedGroup=before.iterator().next();
+        groupHelper.delete( deletedGroup );
         app.goTo().groupPage();
 
-        List<GroupData> after=groupHelper.list();
-        Assert.assertEquals( after.size(), before.size() - 1);
+        Set<GroupData> after=groupHelper.all();
+        Assert.assertEquals( after.size(), before.size() - 1 );
 
 
-        before.remove( index );
-        Assert.assertEquals( before, after);
-        }
+        before.remove( deletedGroup );
+        Assert.assertEquals( before, after );
+    }
 
 
 }
