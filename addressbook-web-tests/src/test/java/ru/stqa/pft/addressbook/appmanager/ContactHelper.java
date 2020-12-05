@@ -16,6 +16,9 @@ import java.util.List;
 public class ContactHelper extends HelperBase {
 
 
+    private WebElement element;
+    private Iterable<? extends WebElement> elements;
+
     public ContactHelper(WebDriver wd) {
         super( wd );
     }
@@ -38,8 +41,8 @@ public class ContactHelper extends HelperBase {
     }
 
 
-    public void initContactModification() {
-        click( By.cssSelector( "img[alt=\"Edit\"]" ) );
+    public void initContactModification(int index) {
+        wd.findElements(  By.cssSelector( "img[alt=\"Edit\"]" )).get( index ).click();
     }
 
     public void submitContactModification() {
@@ -76,8 +79,9 @@ public class ContactHelper extends HelperBase {
         List<ContactData> contacts=new ArrayList<ContactData>();
         List<WebElement> elements=wd.findElements( By.cssSelector( "tr[name='entry']"));
         for (WebElement element : elements) {
-            String surname=element.getText().split(" ")[0];
-            String firstname=element.getText().split(" ")[1];
+            List<WebElement> cells = element.findElements(By.tagName("td"));
+            String surname=cells.get(1).getText();
+            String firstname=cells.get(2).getText();
             int id=Integer.parseInt( element.findElement( By.tagName( "input" ) ).getAttribute( "value" ));
             ContactData contact=new ContactData( id, surname, firstname,  null, null, null, null );
             contacts.add( contact );
@@ -96,7 +100,7 @@ public class ContactHelper extends HelperBase {
         findNew_group( By.name( "new_group" ) );
 
         if (creation) {
-            new Select( wd.findElement( By.name( "new_group" ) ) ).selectByVisibleText( "test 1" );
+            new Select( wd.findElement( By.name( "new_group" ) ) ).selectByVisibleText( "test1" );
         } else {
             Assert.assertFalse( findNew_group( By.name( "new_group" ) ) );
         }
