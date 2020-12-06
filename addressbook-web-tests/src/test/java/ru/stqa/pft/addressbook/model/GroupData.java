@@ -41,6 +41,10 @@ public class GroupData {
 
     public int getId() {  return id;     }
 
+    public void setID(int max) {
+        this.id=id;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -54,11 +58,6 @@ public class GroupData {
     public int hashCode() {
         return Objects.hash( id, name );
     }
-
-    public void setID(int max) {
-        this.id=id;
-    }
-
 
     @Override
     public String toString() {
