@@ -7,10 +7,11 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import ru.stqa.pft.addressbook.model.ContactData;
-import ru.stqa.pft.addressbook.model.GroupData;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.testng.Assert.assertTrue;
 
 
 public class ContactHelper extends HelperBase {
@@ -18,6 +19,7 @@ public class ContactHelper extends HelperBase {
 
     private WebElement element;
     private Iterable<? extends WebElement> elements;
+    private ApplicationManager app;
 
     public ContactHelper(WebDriver wd) {
         super( wd );
@@ -40,22 +42,29 @@ public class ContactHelper extends HelperBase {
         wd.findElement( By.linkText( "add new" ) ).click();
     }
 
+    public void modify(int index, ContactData contact) {
+        initContactModification( index );
+        fillContactForm( contact, false );
+        submitContactModification();
+        returnToHomepage();
+    }
+
 
     public void initContactModification(int index) {
-        wd.findElements(  By.cssSelector( "img[alt=\"Edit\"]" )).get( index ).click();
+        wd.findElements( By.cssSelector( "img[alt=\"Edit\"]" ) ).get( index ).click();
     }
 
     public void submitContactModification() {
         click( By.xpath( "(//input[@name='update'])[2]" ) );
     }
 
-    public void selectContact(int index) {
+    public  void selectContact(int index) {
         wd.findElements( By.name( "selected[]" ) ).get( index ).click();
     }
 
 
-    public void deleteSelectedContact() {
-        click( By.xpath( "//input[@value='Delete']" ) );
+    public  void deleteSelectedContact() {
+        click ( By.xpath( "//input[@value='Delete']" ) );
     }
 
 
@@ -63,9 +72,24 @@ public class ContactHelper extends HelperBase {
         return isElementPresent( By.name( "selected[]" ) );
     }
 
-    public void createContact(ContactData contactData, boolean b) {
+    public void create(ContactData contactData, boolean b) {
         gotoNewContactPage();
         fillContactForm( new ContactData( "Anastasia", "Verem", "Minsk", "+375298641245", "babaVera@tut.by", "test11" ), true );
+        submitContactCreation();
+        returnToHomepage();
+    }
+
+
+    public void delete(int index, ApplicationManager app) {
+        selectContact( index );
+        app.acceptNextAlert=true;
+        deleteSelectedContact();
+        app.AlertAndGetItsText();
+        app.returnHomePage();
+    }
+
+    public void create( ContactData contact) {
+        fillContactForm( contact, true);
         submitContactCreation();
         returnToHomepage();
     }
@@ -75,15 +99,15 @@ public class ContactHelper extends HelperBase {
         return "ContactHelper{}";
     }
 
-    public List<ContactData> getContactList() {
+    public List<ContactData> list() {
         List<ContactData> contacts=new ArrayList<ContactData>();
-        List<WebElement> elements=wd.findElements( By.cssSelector( "tr[name='entry']"));
+        List<WebElement> elements=wd.findElements( By.cssSelector( "tr[name='entry']" ) );
         for (WebElement element : elements) {
-            List<WebElement> cells = element.findElements(By.tagName("td"));
-            String surname=cells.get(1).getText();
-            String firstname=cells.get(2).getText();
-            int id=Integer.parseInt( element.findElement( By.tagName( "input" ) ).getAttribute( "value" ));
-            ContactData contact=new ContactData( id, surname, firstname,  null, null, null, null );
+            List<WebElement> cells=element.findElements( By.tagName( "td" ) );
+            String surname=cells.get( 1 ).getText();
+            String firstname=cells.get( 2 ).getText();
+            int id=Integer.parseInt( element.findElement( By.tagName( "input" ) ).getAttribute( "value" ) );
+            ContactData contact=new ContactData( id, surname, firstname, null, null, null, null );
             contacts.add( contact );
         }
         return contacts;
@@ -100,7 +124,7 @@ public class ContactHelper extends HelperBase {
         findNew_group( By.name( "new_group" ) );
 
         if (creation) {
-            new Select( wd.findElement( By.name( "new_group" ) ) ).selectByVisibleText( "test1" );
+            new Select( wd.findElement( By.name( "new_group" ) ) ).selectByVisibleText( "test 1" );
         } else {
             Assert.assertFalse( findNew_group( By.name( "new_group" ) ) );
         }
@@ -114,6 +138,7 @@ public class ContactHelper extends HelperBase {
             return false;
         }
     }
+
 }
 
 

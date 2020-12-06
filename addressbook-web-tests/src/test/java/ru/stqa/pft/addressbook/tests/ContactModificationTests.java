@@ -1,6 +1,7 @@
 package ru.stqa.pft.addressbook.tests;
 
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.appmanager.ContactHelper;
 import ru.stqa.pft.addressbook.model.ContactData;
@@ -12,30 +13,34 @@ public class ContactModificationTests extends TestBase {
 
     private ContactHelper contactHelper;
 
+    @BeforeMethod
+    public void ensurePreconditions() {
+        this.contactHelper =this.getApp().contact();
+        app.goTo().homePage();
+        if (contactHelper.list().size() == 0) {
+            contactHelper.create( new ContactData( "Verem", "Anastasia", "Minsk", "+375298641245", "babaVera@tut.by", "test1"), true);
+        }
+    }
 
     @Test
     public void testContactModification() {
-        this.contactHelper =this.getApp().getContactHelper();
-        app.goTo().homePage();
-
-        if (!contactHelper.isThereAGroup()) {
-            contactHelper.createContact( new ContactData( "Verem", "Anastasia", "Minsk", "+375298641245", "babaVera@tut.by", "test1"), true);
-        }
-
-        List<ContactData> before = contactHelper.getContactList();
+        List<ContactData> before = contactHelper.list();
         app.acceptNextAlert=true;
-        contactHelper.initContactModification(before.size() - 1);
-        ContactData contact = new ContactData (  before.get( before.size() - 1 ).getId(), "Callous", "Maria", "Milan", "+375292525258", "Milana@tut.by", "null");
-        contactHelper.fillContactForm(contact, false);
-        contactHelper.submitContactModification();
-        contactHelper.returnToHomepage();
-        List<ContactData> after = contactHelper.getContactList();
+        int index = before.size() - 1;
+        ContactData contact = new ContactData (  before.get(index).getId(), "Callous", "Maria", "Milan", "+375292525258", "Milana@tut.by", "null");
+        contactHelper.modify( index, contact );
+        List<ContactData> after = contactHelper.list();
         Assert.assertEquals( after.size(), before.size() );
 
-        before.remove(before.size() - 1);
+        before.remove(index);
         before.add( contact );
 
         Assert.assertEquals( new HashSet<Object>(before),  new HashSet<Object>(after), null);
 
+
+
     }
+
+
+
 }

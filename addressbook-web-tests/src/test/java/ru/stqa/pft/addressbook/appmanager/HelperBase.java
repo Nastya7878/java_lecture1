@@ -39,7 +39,7 @@ public class HelperBase {
         }
     }
 
-    public void gotoGroupPage() {
+    public void groupPage() {
       wd.findElement(By.linkText("group page")).click();
     }
 
