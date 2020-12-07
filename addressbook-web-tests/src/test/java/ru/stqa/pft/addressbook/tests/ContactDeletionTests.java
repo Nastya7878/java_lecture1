@@ -3,7 +3,6 @@ package ru.stqa.pft.addressbook.tests;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import ru.stqa.pft.addressbook.appmanager.ApplicationManager;
 import ru.stqa.pft.addressbook.appmanager.ContactHelper;
 import ru.stqa.pft.addressbook.model.ContactData;
 
@@ -18,7 +17,7 @@ public class ContactDeletionTests extends TestBase {
     this.contactHelper=this.getApp().contact();
     app.goTo().homePage();
     if (contactHelper.list().size() == 0) {
-      contactHelper.create( new ContactData( "Anastasia", "Verem", "Minsk", "+375298641245", "babaVera@tut.by", "test11" ), true );
+      contactHelper.create( new ContactData( ).withSurname( "Verem" ).withFirstname( "Anastasia" ).withAddress( "Minsk" ).withPhone("+375298641245").withEmail("babaVera@tut.by").withGroup( "test11" ));
     }
   }
 
