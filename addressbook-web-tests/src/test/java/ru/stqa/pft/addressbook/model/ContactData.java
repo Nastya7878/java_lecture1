@@ -10,6 +10,11 @@ public class ContactData {
     private  String phone;
     private  String email;
     private  String group;
+    private String homePhone;
+    private String mobilePhone;
+    private String workPhone;
+
+
 
     public ContactData withId(int id) {
         this.id=id;
@@ -31,6 +36,7 @@ public class ContactData {
         return this;
     }
 
+
     public ContactData withPhone(String phone) {
         this.phone=phone;
         return this;
@@ -45,6 +51,27 @@ public class ContactData {
         this.group=group;
         return this;
     }
+
+    public String getHomePhone() { return homePhone;  }
+
+    public ContactData withHomePhone(String homePhone) {
+        this.homePhone=homePhone;
+        return this;}
+
+    public String getMobilePhone() { return mobilePhone;  }
+
+    public ContactData withMobilePhone(String mobilePhone) {
+        this.mobilePhone=mobilePhone;
+        return this;}
+
+    public String getWorkPhone() { return workPhone;  }
+
+    public ContactData withWorkPhone(String workPhone) {
+        this.workPhone=workPhone;
+        return this;
+    }
+
+
 
 
     @Override
@@ -99,7 +126,6 @@ public class ContactData {
                 ", firstname='" + firstname + '\'' +
                 '}';
     }
-
 }
 
 
