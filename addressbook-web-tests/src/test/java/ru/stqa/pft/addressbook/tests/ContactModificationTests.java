@@ -6,8 +6,7 @@ import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.appmanager.ContactHelper;
 import ru.stqa.pft.addressbook.model.ContactData;
 
-import java.util.HashSet;
-import java.util.List;
+import java.util.Set;
 
 public class ContactModificationTests extends TestBase {
 
@@ -17,26 +16,25 @@ public class ContactModificationTests extends TestBase {
     public void ensurePreconditions() {
         this.contactHelper =this.getApp().contact();
         app.goTo().homePage();
-        if (contactHelper.list().size() == 0) {
+        if (contactHelper.all().size() == 0) {
             contactHelper.create ( new ContactData( ).withSurname( "Verem" ).withFirstname( "Anastasia" ).withAddress( "Minsk" ).withPhone("+375298641245").withEmail("babaVera@tut.by").withGroup( "test1" ));
         }
     }
 
     @Test
     public void testContactModification() {
-        List<ContactData> before = contactHelper.list();
+        Set<ContactData> before = contactHelper.all();
+        ContactData modifiedContact = before.iterator().next();
         app.acceptNextAlert=true;
-        int index = before.size() - 1;
         ContactData contact = new ContactData
-                ().withId( before.get(index).getId() ).withSurname( "Callous" ).withFirstname( "Maria" ).withAddress( "Milan" ).withPhone( "+375292525258" ).withEmail( "Milana@tut.by" ).withGroup("null");
-        contactHelper.modify( index, contact );
-        List<ContactData> after = contactHelper.list();
+                ().withId( modifiedContact.getId() ).withSurname( "Callous" ).withFirstname( "Maria" ).withAddress( "Milan" ).withPhone( "+375292525258" ).withEmail( "Milana@tut.by" ).withGroup("null");
+        contactHelper.modify(contact);
+        Set<ContactData> after = contactHelper.all();
         Assert.assertEquals( after.size(), before.size() );
 
-        before.remove(index);
+        before.remove(modifiedContact);
         before.add( contact );
-
-        Assert.assertEquals( new HashSet<Object>(before),  new HashSet<Object>(after), null);
+        Assert.assertEquals( before, after);
 
 
 
