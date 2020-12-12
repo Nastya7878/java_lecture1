@@ -116,9 +116,7 @@ public class ContactHelper extends HelperBase {
 
         type( By.name( "firstname" ), contact.getFirstname() );
         type( By.name( "lastname" ), contact.getSurname() );
-        type( By.name( "address" ), contact.getAddress() );
-        type( By.name( "mobile" ), contact.getPhone() );
-        type( By.name( "email" ), contact.getEmail() );
+        attach( By.name( "photo" ),contact.getPhoto() );
 
         findNew_group( By.name( "new_group" ) );
 
@@ -153,10 +151,11 @@ public class ContactHelper extends HelperBase {
 
             contacts.add( new ContactData().withId( id )
                     .withSurname( surname ).withFirstname( firstname )
-                    .withAllPhones( allPhones )
-                    .withAddress( address[0] )
-                    .withAllEmail(allEmails));
+                   .withAllPhones( allPhones )
+                   .withAddress( address[0] )
+                   .withAllEmail(allEmails));
         }
+
         return contacts;
     }
 
