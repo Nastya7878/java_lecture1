@@ -1,28 +1,65 @@
 package ru.stqa.pft.addressbook.model;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
+
+import java.io.File;
 import java.util.Objects;
 
+@XStreamAlias( "contacts" )
 public class ContactData {
-    public int id = Integer.MAX_VALUE;
-    private  String firstname;
-    private  String surname;
-    private  String address;
-    private  String phone;
-    private  String email;
-    private  String group;
+    @XStreamOmitField
+    public int id=Integer.MAX_VALUE;
+    private String firstname;
+    private String surname;
+    private String address;
+    private String phone;
+    private String group;
     private String homePhone;
     private String mobilePhone;
     private String workPhone;
     private String allPhones;
+    private String allEmails;
+    private String email;
+    private String email2;
+    private String email3;
+    private File photo;
 
-    public String getAllPhones() {
-        return allPhones;
+    public File getPhoto() {
+        return photo;
+    }
+
+    public ContactData withPhoto(File photo) {
+        this.photo=photo;
+        return this;
+    }
+
+    public ContactData withEmail(String email) {
+        this.email=email;
+        return this;
+    }
+
+    public ContactData withEmail2(String email2) {
+        this.email2=email2;
+        return this;
+    }
+
+    public ContactData withEmail3(String email3) {
+        this.email3=email3;
+        return this;
     }
 
     public ContactData withAllPhones(String allPhones) {
         this.allPhones=allPhones;
         return this;
     }
+
+
+    public ContactData withAllEmail(String allEmails) {
+        this.allEmails=allEmails;
+        return this;
+    }
+
 
     public ContactData withId(int id) {
         this.id=id;
@@ -50,52 +87,39 @@ public class ContactData {
         return this;
     }
 
-    public ContactData withEmail(String email) {
-        this.email=email;
-        return this;
-    }
 
     public ContactData withGroup(String group) {
         this.group=group;
         return this;
     }
 
-    public String getHomePhone() { return homePhone;  }
+    public String getHomePhone() {
+        return homePhone;
+    }
 
     public ContactData withHomePhone(String homePhone) {
         this.homePhone=homePhone;
-        return this;}
+        return this;
+    }
 
-    public String getMobilePhone() { return mobilePhone;  }
+    public String getMobilePhone() {
+        return mobilePhone;
+    }
 
     public ContactData withMobilePhone(String mobilePhone) {
         this.mobilePhone=mobilePhone;
-        return this;}
-
-    public String getWorkPhone() { return workPhone;  }
+        return this;
+    }
 
     public ContactData withWorkPhone(String workPhone) {
         this.workPhone=workPhone;
         return this;
     }
 
+    public String getWorkPhone() { return workPhone; }
 
 
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ContactData that=(ContactData) o;
-        return id == that.id &&
-                Objects.equals( firstname, that.firstname ) &&
-                Objects.equals( surname, that.surname );
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash( id, firstname, surname );
-    }
 
     public int getId() {
         return id;
@@ -121,21 +145,55 @@ public class ContactData {
         return email;
     }
 
+    public String getEmail2() {
+        return email2;
+    }
+
+    public String getEmail3() {
+        return email3;
+    }
+
     public String getGroup() {
         return group;
     }
 
-
-    @Override
-    public String toString() {
-        return "ContactData{" +
-                "id='" + id + '\'' +
-                ", surname='" + surname + '\'' +
-                ", firstname='" + firstname + '\'' +
-                '}';
+    public String getAllPhones() {
+        return allPhones;
     }
 
+    public String getAllEmails() { return allEmails; }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ContactData that=(ContactData) o;
+        return id == that.id &&
+                Objects.equals( firstname, that.firstname ) &&
+                Objects.equals( surname, that.surname ) &&
+                Objects.equals( address, that.address ) &&
+                Objects.equals( phone, that.phone ) &&
+                Objects.equals( group, that.group ) &&
+                Objects.equals( homePhone, that.homePhone ) &&
+                Objects.equals( mobilePhone, that.mobilePhone ) &&
+                Objects.equals( workPhone, that.workPhone ) &&
+                Objects.equals( allPhones, that.allPhones ) &&
+                Objects.equals( allEmails, that.allEmails ) &&
+                Objects.equals( email, that.email ) &&
+                Objects.equals( email2, that.email2 ) &&
+                Objects.equals( email3, that.email3 );
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash( id, firstname, surname,
+                address, phone, group, homePhone, mobilePhone,
+                workPhone, allPhones, email, email2, email3, allEmails );
+    }
 }
+
+
 
 
 
