@@ -66,7 +66,7 @@ public class GroupCreationTests extends TestBase {
     }
 
     @Test
-    public void testBadGroupCreation() {
+        public void testBadGroupCreation() {
         app.goTo().groupPage();
         GroupHelper groupHelper=app.group();
         Groups before=groupHelper.all();
