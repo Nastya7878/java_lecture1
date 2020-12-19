@@ -9,25 +9,35 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.BrowserType;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import static org.testng.Assert.assertTrue;
 
 public class ApplicationManager {
+    private final Properties properties;
     public NavigationHelper NavigationHelper;
     public WebDriver wd;
-
     private SessionHelper sessionHelper;
     private NavigationHelper navigationHelper;
     private GroupHelper groupHelper;
+    private ContactHelper contactHelper;
     private String browser;
     public boolean acceptNextAlert=true;
 
     public ApplicationManager(String browser) {
         this.browser=browser;
+        properties = new Properties();
+
     }
 
-    public void init() {
+    public void init() throws IOException {
+        String target=System.getProperty( "target", "local" );
+        properties.load(new FileReader(new File(String.format("src/test/resources/%s.properties", target))));
+
         if (browser.equals( BrowserType.FIREFOX )) {
             wd=new FirefoxDriver();
         } else if (browser.equals( BrowserType.CHROME )) {
@@ -36,12 +46,12 @@ public class ApplicationManager {
             wd=new InternetExplorerDriver();
         }
 
-        wd.manage().timeouts().implicitlyWait( 3, TimeUnit.SECONDS );
-        wd.get( "http://localhost/addressbook/" );
+        wd.manage().timeouts().implicitlyWait( 5, TimeUnit.SECONDS );
+        wd.get( properties.getProperty( "web.baseUrl" ));
         groupHelper=new GroupHelper( wd );
         navigationHelper=new NavigationHelper( wd );
         sessionHelper=new SessionHelper( wd );
-        sessionHelper.login( "admin", "secret" );
+        sessionHelper.login(properties.getProperty( "web.adminLogin"), properties.getProperty( "web.adminPassword" ));
 
         wd.manage().timeouts().implicitlyWait( 5, TimeUnit.SECONDS );
     }
@@ -64,11 +74,11 @@ public class ApplicationManager {
     }
 
 
-    public GroupHelper getGroupHelper() {
+    public GroupHelper group() {
         return groupHelper;
     }
 
-    public NavigationHelper getNavigationHelper() {
+    public NavigationHelper goTo() {
         return navigationHelper;
     }
 
@@ -77,9 +87,9 @@ public class ApplicationManager {
         wd.findElement( By.xpath( "//div[@id='header']/a" ) ).click();
     }
 
-    public void gotoNewContactPage() {
-        wd.findElement( By.linkText( "add new" ) ).click();
-    }
+    public void gotoNewContactPage() { wd.findElement( By.linkText( "add new" ) ).click(); }
+
+
 
 
     public String closeAlertAndGetItsText() {
@@ -101,11 +111,11 @@ public class ApplicationManager {
         assertTrue( closeAlertAndGetItsText().matches( "^Delete 1 addresses[\\s\\S]$" ) );
     }
 
-    public ContactHelper getContactHelper() {
+    public ContactHelper contact() {
         return new ContactHelper( wd );
     }
-
 }
+
 
 
 
