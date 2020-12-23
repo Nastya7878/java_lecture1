@@ -2,35 +2,75 @@ package ru.stqa.pft.addressbook.model;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
+import org.hibernate.annotations.Type;
 
+import javax.persistence.*;
 import java.io.File;
 import java.util.Objects;
 
 @XStreamAlias( "contacts" )
+@Entity
+@Table(name = "addressbook")
 public class ContactData {
     @XStreamOmitField
-    public int id=Integer.MAX_VALUE;
-    private String firstname;
-    private String surname;
-    private String address;
-    private String phone;
-    private String group;
-    private String homePhone;
-    private String mobilePhone;
-    private String workPhone;
-    private String allPhones;
-    private String allEmails;
-    private String email;
-    private String email2;
-    private String email3;
-    private File photo;
 
-    public File getPhoto() {
-        return photo;
+    @Id
+    @Column(name = "id")
+    public int id=Integer.MAX_VALUE;
+
+    @Column(name = "firstname")
+    private String firstname;
+
+    @Column(name = "lastname")
+    private String surname;
+
+    @Transient
+    private String address;
+    @Transient
+    private String phone;
+    @Transient
+    private String group;
+
+    @Column(name = "home")
+    @Type( type="text" )
+    private String homePhone;
+
+    @Column(name = "mobile")
+    @Type( type="text" )
+    private String mobilePhone;
+
+    @Column(name = "work")
+    @Type( type="text" )
+    private String workPhone;
+
+    @Transient
+    private String allPhones;
+    @Transient
+    private String allEmails;
+    @Transient
+    private String email;
+    @Transient
+    private String email2;
+    @Transient
+    private String email3;
+
+    @Override
+    public String toString() {
+        return "ContactData{" +
+                "id=" + id +
+                ", firstname='" + firstname + '\'' +
+                ", surname='" + surname + '\'' +
+                '}';
     }
 
+    @Column(name = "photo")
+    @Type( type="text" )
+    private String photo;
+
+    public File getPhoto() { return new File (photo);}
+
     public ContactData withPhoto(File photo) {
-        this.photo=photo;
+        this.photo=photo.getPath();
         return this;
     }
 
