@@ -2,12 +2,12 @@ package ru.stqa.pft.addressbook.tests;
 
 
 import com.thoughtworks.xstream.XStream;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.appmanager.ContactHelper;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.Contacts;
-import ru.stqa.pft.addressbook.model.GroupData;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -38,16 +38,26 @@ public class ContactCreationTests extends TestBase {
     }
   }
 
+  @BeforeMethod
+  public void ensurePreconditions() {
+
+    if (app.db().contacts().size() == 0) {
+      app.goTo().homePage();
+      ContactHelper contactHelper=app.contact();
+      contactHelper.create ( new ContactData().withSurname( "Surname" ));
+    }
+  }
+
 
   @Test(dataProvider="validContacts")
   public void testContactCreation(ContactData contact) {
     ContactHelper contactHelper=app.contact();
-    Contacts before=contactHelper.all();
+    Contacts before = app.db().contacts();
     app.gotoNewContactPage();
     contactHelper.create( contact );
-    Contacts after=contactHelper.all();
+    Contacts after = app.db().contacts();
     assertThat( app.contact().count(), equalTo( before.size() + 1 ) );
-    //  assertThat( after, equalTo(before.withAdded( contact.withId( after.stream().mapToInt( (g) -> g.getId() ).max().getAsInt() ) ) ) );
+    assertThat( after, equalTo(before.withAdded( contact.withId(  after.stream().mapToInt( (g) -> g.getId() ).max().getAsInt() ) ) ) );
   }
 }
 
