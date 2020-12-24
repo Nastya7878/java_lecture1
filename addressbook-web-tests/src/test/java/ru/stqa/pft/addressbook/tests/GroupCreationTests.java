@@ -5,6 +5,7 @@ import com.google.gson.reflect.TypeToken;
 import com.thoughtworks.xstream.XStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.appmanager.GroupHelper;
@@ -53,30 +54,37 @@ public class GroupCreationTests extends TestBase {
             return groups.stream().map( (g) -> new Object[] {g} ).collect( Collectors.toList() ).iterator();
         }
     }
-
+    @BeforeMethod
+    public void ensurePreconditions() {
+        if (app.db().groups().size() == 0) {
+            app.goTo().groupPage();
+            GroupHelper groupHelper=app.group();
+            groupHelper.create( new GroupData().withName( "test1" ) );
+        }
+    }
 
     @Test(dataProvider="validGroupsFromJson")
     public void testGroupCreation(GroupData group) {
         app.goTo().groupPage();
         GroupHelper groupHelper=app.group();
-        Groups before=groupHelper.all();
+        Groups before=app.db().groups();
         groupHelper.create( group );
         assertThat( app.group().count(), equalTo( before.size() + 1 ) );
-        Groups after=groupHelper.all();
+        Groups after=app.db().groups();
         assertThat( after.size(), equalTo( before.size() + 1 ) );
         assertThat( after, equalTo
                 ( before.withAdded( group.withId( after.stream().mapToInt( (g) -> g.getId() ).max().getAsInt() ) ) ) );
         }
 
-    @Test (enabled=false)
+    @Test
         public void testBadGroupCreation () {
         app.goTo().groupPage();
         GroupHelper groupHelper=app.group();
-        Groups before=groupHelper.all();
-        GroupData group=new GroupData().withName( "test" );
+        Groups before=app.db().groups();
+        GroupData group=new GroupData().withName( "test'" );
         groupHelper.create( group );
         assertThat( app.group().count(), equalTo( before.size() ) );
-        Groups after=groupHelper.all();
+        Groups after=app.db().groups();
         assertThat( after, equalTo( before));
     }
 }
