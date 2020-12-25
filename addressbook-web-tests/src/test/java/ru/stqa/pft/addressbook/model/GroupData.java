@@ -38,11 +38,14 @@ public class GroupData {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         GroupData groupData=(GroupData) o;
-        return id == groupData.id &&
-                Objects.equals( name, groupData.name ) &&
-                Objects.equals( header, groupData.header ) &&
-                Objects.equals( footer, groupData.footer );
+
+        if (id != groupData.id) return false;
+        if (!Objects.equals( name, groupData.name )) return false;
+        if (!Objects.equals( header, groupData.header )) return false;
+        return Objects.equals( footer, groupData.footer );
+
     }
 
     @Override
