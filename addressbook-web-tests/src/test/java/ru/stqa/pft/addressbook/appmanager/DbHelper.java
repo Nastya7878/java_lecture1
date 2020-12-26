@@ -17,15 +17,14 @@ public class DbHelper {
     private final SessionFactory sessionFactory;
 
     public DbHelper() {
-
         // A SessionFactory is set up once for an application!
         final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
                 .configure() // configures settings from hibernate.cfg.xml
                 .build();
-        sessionFactory = new MetadataSources( registry ).buildMetadata().buildSessionFactory();
-    }
+       sessionFactory = new MetadataSources( registry ).buildMetadata().buildSessionFactory();
+        }
 
-    public Groups groups () {
+    public Groups groups() {
         Session session=sessionFactory.openSession();
         session.beginTransaction();
         List<GroupData> result = session.createQuery( "from GroupData" ).list();
@@ -43,4 +42,5 @@ public class DbHelper {
         return new Contacts(result);
     }
 }
+
 

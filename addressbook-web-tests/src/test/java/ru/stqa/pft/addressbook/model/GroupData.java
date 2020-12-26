@@ -11,7 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Objects;
 
-@XStreamAlias( "group" )
+@XStreamAlias( "groups" )
 @Entity
 @Table(name = "group_list")
 public class GroupData {
@@ -34,24 +34,6 @@ public class GroupData {
     @Type( type="text" )
     private  String footer;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        GroupData groupData=(GroupData) o;
-
-        if (id != groupData.id) return false;
-        if (!Objects.equals( name, groupData.name )) return false;
-        if (!Objects.equals( header, groupData.header )) return false;
-        return Objects.equals( footer, groupData.footer );
-
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash( id, name, header, footer );
-    }
 
     public GroupData withId(int id) {
         this.id=id;
@@ -87,6 +69,20 @@ public class GroupData {
 
     public void setID(int max) {
         this.id=id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GroupData groupData=(GroupData) o;
+        return id == groupData.id &&
+                Objects.equals( name, groupData.name );
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash( id, name );
     }
 
     @Override
