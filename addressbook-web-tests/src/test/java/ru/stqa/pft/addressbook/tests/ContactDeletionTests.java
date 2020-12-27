@@ -8,31 +8,30 @@ import ru.stqa.pft.addressbook.model.Contacts;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.testng.Assert.assertEquals;
 
 public class ContactDeletionTests extends TestBase {
 
-
-
+  private ContactHelper contactHelper;
 
   @BeforeMethod
   public void ensurePreconditions() {
-
-    if (app.db().contacts().size() == 0) {
-      app.goTo().homePage();
-      ContactHelper contactHelper=app.contact();
-      contactHelper.create ( new ContactData().withSurname( "Verem" ).withFirstname( "Anastasia" ).withAddress( "Minsk" ).withPhone("+375298641245").withEmail("babaVera@tut.by").withGroup( "test1" ));
+    this.contactHelper=this.getApp().contact();
+    app.goTo().homePage();
+    if (contactHelper.all().size() == 0) {
+      contactHelper.create( new ContactData( ).withSurname( "Verem" ).withFirstname( "Anastasia" ).withAddress( "Minsk" ));
     }
   }
 
   @Test
   public void testContactDeletion() throws Exception {
-    ContactHelper contactHelper=app.contact();
-    Contacts before = app.db().contacts();
+    Contacts before = contactHelper.all();
     ContactData deletedContact = before.iterator().next();
-    app.goTo().homePage();
     contactHelper.delete( deletedContact, app );
-    assertThat(app.contact().count(), equalTo(before.size() - 1 ));
-    Contacts after = app.db().contacts();
+    Contacts after = contactHelper.all();
+    assertEquals( after.size(), before.size() - 1);
+
     assertThat( after, equalTo( before.without(deletedContact) ) );
+    verifyContactListInUI();
   }
 }

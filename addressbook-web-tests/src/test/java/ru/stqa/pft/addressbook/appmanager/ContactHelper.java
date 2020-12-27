@@ -100,9 +100,14 @@ public class ContactHelper extends HelperBase {
     }
 
     public void create( ContactData contact) {
+        initContactCreation();
         fillContactForm( contact, true);
         submitContactCreation();
         returnToHomepage();
+    }
+
+    private void initContactCreation() {
+        click( By.linkText("add new") );
     }
 
 
@@ -116,7 +121,10 @@ public class ContactHelper extends HelperBase {
 
         type( By.name( "firstname" ), contact.getFirstname() );
         type( By.name( "lastname" ), contact.getSurname() );
-        attach( By.name( "photo" ),contact.getPhoto() );
+        type( By.name( "address" ), contact.getAddress() );
+        type( By.name( "mobile" ), contact.getPhone() );
+        type( By.name( "email" ), contact.getEmail() );
+     //   attach( By.name( "photo" ),contact.getPhoto() );
 
         findNew_group( By.name( "new_group" ) );
 

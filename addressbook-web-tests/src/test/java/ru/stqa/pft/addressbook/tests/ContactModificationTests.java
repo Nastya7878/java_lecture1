@@ -20,7 +20,7 @@ public class ContactModificationTests extends TestBase {
         if (app.db().contacts().size() == 0) {
         app.goTo().homePage();
         ContactHelper contactHelper=app.contact();
-        contactHelper.create ( new ContactData().withSurname( "Verem" ).withFirstname( "Anastasia" ).withAddress( "Minsk" ).withPhone("+375298641245").withEmail("babaVera@tut.by").withGroup( "test1" ));
+        contactHelper.create ( new ContactData().withSurname( "Verem" ).withFirstname( "Anastasia" ).withAddress( "Minsk" ));
         }
     }
 
@@ -31,13 +31,15 @@ public class ContactModificationTests extends TestBase {
         ContactData modifiedContact = before.iterator().next();
         app.acceptNextAlert=true;
         ContactData contact = new ContactData()
-                .withId( modifiedContact.getId() ).withSurname( "Callous" ).withFirstname( "Maria" ).withAddress( "Milan" ).withPhone( "+375292525258" ).withEmail( "Milana@tut.by" ).withGroup("null");
+                .withId( modifiedContact.getId() ).withSurname( "Callous" ).withFirstname( "Maria" ).withAddress("address" ).withHomePhone( "" ).withMobilePhone( "" ).withWorkPhone( "" )
+                .withEmail( "" ).withEmail2( "" ).withEmail3( "" );
         app.goTo().homePage();
         contactHelper.modify(contact);
 
         assertThat( app.contact().count(), equalTo( before.size()));
         Contacts after = app.db().contacts();
-        //assertThat( after, equalTo( before.without( modifiedContact ).withAdded(contact)) );
+        assertThat( after, equalTo( before.without( modifiedContact ).withAdded(contact)) );
+        verifyContactListInUI();
 
     }
 }

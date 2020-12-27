@@ -22,6 +22,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ContactCreationTests extends TestBase {
 
+
   @DataProvider
   public Iterator<Object[]> validContacts() throws IOException {
     try (BufferedReader reader=new BufferedReader( new FileReader( new File( "src/test/resources/contacts.xml" ) ) )) {
@@ -32,7 +33,7 @@ public class ContactCreationTests extends TestBase {
         line=reader.readLine();
       }
       XStream xstream=new XStream();
-      xstream.processAnnotations( ContactData.class );
+      xstream.processAnnotations( Contacts.class );
       List<ContactData> contacts=(List<ContactData>) xstream.fromXML( xml );
       return contacts.stream().map( (g) -> new Object[]{g} ).collect( Collectors.toList() ).iterator();
     }
@@ -44,7 +45,7 @@ public class ContactCreationTests extends TestBase {
     if (app.db().contacts().size() == 0) {
       app.goTo().homePage();
       ContactHelper contactHelper=app.contact();
-      contactHelper.create ( new ContactData().withSurname( "Surname" ));
+      contactHelper.create( new ContactData().withSurname( "Verem" ).withFirstname( "Anastasia" ).withAddress( "Minsk" ));
     }
   }
 
@@ -52,13 +53,17 @@ public class ContactCreationTests extends TestBase {
   @Test(dataProvider="validContacts")
   public void testContactCreation(ContactData contact) {
     ContactHelper contactHelper=app.contact();
-    Contacts before = app.db().contacts();
+    Contacts before=app.db().contacts();
     app.gotoNewContactPage();
     contactHelper.create( contact );
-    Contacts after = app.db().contacts();
+    Contacts after=app.db().contacts();
     assertThat( app.contact().count(), equalTo( before.size() + 1 ) );
-    assertThat( after, equalTo(before.withAdded( contact.withId(  after.stream().mapToInt( (g) -> g.getId() ).max().getAsInt() ) ) ) );
+    assertThat( after, equalTo( before.withAdded( contact.withId( after.stream().mapToInt( (g) -> g.getId() ).max().getAsInt() ) ) ) );
+    verifyContactListInUI();
+
+
   }
+
 }
 
 

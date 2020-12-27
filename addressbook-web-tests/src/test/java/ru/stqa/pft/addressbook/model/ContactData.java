@@ -5,18 +5,17 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.io.File;
 import java.util.Objects;
 
-@XStreamAlias( "contacts" )
+@XStreamAlias( "contact" )
 @Entity
 @Table(name = "addressbook")
+
 public class ContactData {
     @XStreamOmitField
-
     @Id
     @Column(name = "id")
-    public int id=Integer.MAX_VALUE;
+    private int id=Integer.MAX_VALUE;
 
     @Column(name = "firstname")
     private String firstname;
@@ -24,21 +23,28 @@ public class ContactData {
     @Column(name = "lastname")
     private String surname;
 
-    @Transient
+    @Column(name = "address")
+    @Type( type="text" )
     private String address;
+
     @Transient
-    private String phone;
+    @Column(name = "phone")
+     private String phone;
+
     @Transient
     private String group;
 
+    @Transient
     @Column(name = "home")
     @Type( type="text" )
     private String homePhone;
 
+    @Transient
     @Column(name = "mobile")
     @Type( type="text" )
     private String mobilePhone;
 
+    @Transient
     @Column(name = "work")
     @Type( type="text" )
     private String workPhone;
@@ -47,34 +53,62 @@ public class ContactData {
     private String allPhones;
     @Transient
     private String allEmails;
+
     @Transient
+    @Column(name = "email")
+    @Type( type="text" )
     private String email;
+
     @Transient
+    @Column(name = "email2")
+    @Type( type="text" )
     private String email2;
+
     @Transient
+    @Column(name = "email3")
+    @Type( type="text" )
     private String email3;
 
     @Override
-    public String toString() {
-        return "ContactData{" +
-                "id=" + id +
-                ", firstname='" + firstname + '\'' +
-                ", surname='" + surname + '\'' +
-                '}';
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ContactData that=(ContactData) o;
+        return id == that.id &&
+                Objects.equals( firstname, that.firstname ) &&
+                Objects.equals( surname, that.surname ) &&
+                Objects.equals( address, that.address )&&
+                Objects.equals( phone, that.phone ) &&
+                Objects.equals( group, that.group ) &&
+                Objects.equals( homePhone, that.homePhone ) &&
+                Objects.equals( mobilePhone, that.mobilePhone ) &&
+                Objects.equals( workPhone, that.workPhone ) &&
+                Objects.equals( allPhones, that.allPhones ) &&
+                Objects.equals( allEmails, that.allEmails ) &&
+                Objects.equals( email, that.email ) &&
+                Objects.equals( email2, that.email2 ) &&
+                Objects.equals( email3, that.email3 );
+           //     Objects.equals( photo, that.photo );
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash( id, firstname, surname, address, phone, group, homePhone, mobilePhone, workPhone, allPhones, allEmails, email, email2, email3);
+    }
+
+    @Transient
     @Column(name = "photo")
     @Type( type="text" )
     private String photo;
 
-    public File getPhoto() { return new File (photo);}
+    // public File getPhoto() { return new File (photo);}
 
-    public ContactData withPhoto(File photo) {
-        this.photo=photo.getPath();
-        return this;
-    }
+  //  public ContactData withPhoto(File photo) {
+  //      this.photo=photo.getPath();
+  //      return this;
+  //  }
 
-    public ContactData withEmail(String email) {
+   public ContactData withEmail(String email) {
         this.email=email;
         return this;
     }
@@ -121,7 +155,6 @@ public class ContactData {
         return this;
     }
 
-
     public ContactData withPhone(String phone) {
         this.phone=phone;
         return this;
@@ -159,8 +192,6 @@ public class ContactData {
     public String getWorkPhone() { return workPhone; }
 
 
-
-
     public int getId() {
         return id;
     }
@@ -176,6 +207,8 @@ public class ContactData {
     public String getAddress() {
         return address;
     }
+
+
 
     public String getPhone() {
         return phone;
@@ -204,32 +237,14 @@ public class ContactData {
     public String getAllEmails() { return allEmails; }
 
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ContactData that=(ContactData) o;
-        return id == that.id &&
-                Objects.equals( firstname, that.firstname ) &&
-                Objects.equals( surname, that.surname ) &&
-                Objects.equals( address, that.address ) &&
-                Objects.equals( phone, that.phone ) &&
-                Objects.equals( group, that.group ) &&
-                Objects.equals( homePhone, that.homePhone ) &&
-                Objects.equals( mobilePhone, that.mobilePhone ) &&
-                Objects.equals( workPhone, that.workPhone ) &&
-                Objects.equals( allPhones, that.allPhones ) &&
-                Objects.equals( allEmails, that.allEmails ) &&
-                Objects.equals( email, that.email ) &&
-                Objects.equals( email2, that.email2 ) &&
-                Objects.equals( email3, that.email3 );
-    }
 
     @Override
-    public int hashCode() {
-        return Objects.hash( id, firstname, surname,
-                address, phone, group, homePhone, mobilePhone,
-                workPhone, allPhones, email, email2, email3, allEmails );
+    public String toString() {
+        return "ContactData{" +
+                "id=" + id +
+                ", firstname='" + firstname + '\'' +
+                ", surname='" + surname + '\'' +
+                '}';
     }
 }
 
