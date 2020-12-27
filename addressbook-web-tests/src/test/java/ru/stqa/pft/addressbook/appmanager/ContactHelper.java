@@ -84,7 +84,7 @@ public class ContactHelper extends HelperBase {
 
     public void create(ContactData contactData, boolean b) {
         gotoNewContactPage();
-        fillContactForm( new ContactData().withSurname( "Verem" ).withFirstname( "Anastasia" ).withAddress( "Minsk" ).withPhone("+375298641245").withEmail("babaVera@tut.by").withGroup( "test11" ), true );
+        fillContactForm( new ContactData().withSurname( "Verem" ).withFirstname( "Anastasia" ).withAddress( "Minsk" ), true );
         submitContactCreation();
         returnToHomepage();
     }

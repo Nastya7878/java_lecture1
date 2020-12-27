@@ -5,7 +5,9 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @XStreamAlias( "contact" )
 @Entity
@@ -30,9 +32,6 @@ public class ContactData {
     @Transient
     @Column(name = "phone")
      private String phone;
-
-    @Transient
-    private String group;
 
     @Transient
     @Column(name = "home")
@@ -69,6 +68,16 @@ public class ContactData {
     @Type( type="text" )
     private String email3;
 
+    public Groups getGroups() {
+        return new Groups (groups);
+    }
+
+    @ManyToMany(fetch=FetchType.EAGER)
+    @JoinTable(name = "address_in_groups",
+            joinColumns= @JoinColumn(name ="id"), inverseJoinColumns= @JoinColumn (name = "group_id"))
+    private Set<GroupData> groups = new HashSet<GroupData>();
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -79,7 +88,7 @@ public class ContactData {
                 Objects.equals( surname, that.surname ) &&
                 Objects.equals( address, that.address )&&
                 Objects.equals( phone, that.phone ) &&
-                Objects.equals( group, that.group ) &&
+
                 Objects.equals( homePhone, that.homePhone ) &&
                 Objects.equals( mobilePhone, that.mobilePhone ) &&
                 Objects.equals( workPhone, that.workPhone ) &&
@@ -93,7 +102,7 @@ public class ContactData {
 
     @Override
     public int hashCode() {
-        return Objects.hash( id, firstname, surname, address, phone, group, homePhone, mobilePhone, workPhone, allPhones, allEmails, email, email2, email3);
+        return Objects.hash( id, firstname, surname, address, phone,  homePhone, mobilePhone, workPhone, allPhones, allEmails, email, email2, email3);
     }
 
     @Transient
@@ -161,11 +170,6 @@ public class ContactData {
     }
 
 
-    public ContactData withGroup(String group) {
-        this.group=group;
-        return this;
-    }
-
     public String getHomePhone() {
         return homePhone;
     }
@@ -224,10 +228,6 @@ public class ContactData {
 
     public String getEmail3() {
         return email3;
-    }
-
-    public String getGroup() {
-        return group;
     }
 
     public String getAllPhones() {
