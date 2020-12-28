@@ -1,13 +1,13 @@
 package ru.stqa.pft.addressbook.appmanager;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.Contacts;
+import ru.stqa.pft.addressbook.model.GroupData;
 
 import java.util.List;
 
@@ -84,7 +84,7 @@ public class ContactHelper extends HelperBase {
 
     public void create(ContactData contactData, boolean b) {
         gotoNewContactPage();
-        fillContactForm( new ContactData().withSurname( "Verem" ).withFirstname( "Anastasia" ).withAddress( "Minsk" ), true );
+        fillContactForm( new ContactData().withSurname( "Verem" ).withFirstname( "Anastasia" ).withAddress( "Minsk" ).withPhone("+375298641245").withEmail("babaVera@tut.by"), true );
         submitContactCreation();
         returnToHomepage();
     }
@@ -106,8 +106,8 @@ public class ContactHelper extends HelperBase {
         returnToHomepage();
     }
 
-    private void initContactCreation() {
-        click( By.linkText("add new") );
+    public void initContactCreation() {
+        click( By.linkText( "add new" ) );
     }
 
 
@@ -117,32 +117,26 @@ public class ContactHelper extends HelperBase {
     }
 
 
-    public void fillContactForm(ContactData contact, boolean creation) {
+    public void fillContactForm(ContactData contactData, boolean creation) {
 
-        type( By.name( "firstname" ), contact.getFirstname() );
-        type( By.name( "lastname" ), contact.getSurname() );
-        type( By.name( "address" ), contact.getAddress() );
-        type( By.name( "mobile" ), contact.getPhone() );
-        type( By.name( "email" ), contact.getEmail() );
-     //   attach( By.name( "photo" ),contact.getPhoto() );
-
-        findNew_group( By.name( "new_group" ) );
+        type( By.name( "firstname" ), contactData.getFirstname() );
+        type( By.name( "lastname" ), contactData.getSurname() );
+        type( By.name( "address" ), contactData.getAddress() );
+        type( By.name( "mobile" ), contactData.getPhone() );
+        type( By.name( "email" ), contactData.getEmail() );
+        attach( By.name( "photo" ), contactData.getPhoto() );
 
         if (creation) {
-            new Select( wd.findElement( By.name( "new_group" ) ) ).selectByVisibleText( "test 1" );
+            if (contactData.getGroups().size() > 0) {
+                Assert.assertTrue( contactData.getGroups().size() == 1 );
+            }
+            new Select( wd.findElement( By.name( "new_group" ) ) ).selectByVisibleText( contactData.getGroups()
+                    .iterator().next().getName() );
         } else {
-            Assert.assertFalse( findNew_group( By.name( "new_group" ) ) );
+            Assert.assertFalse( isElementPresent( By.name( "new_group" ) ) );
         }
     }
 
-    public boolean findNew_group(By locator) {
-        try {
-            wd.findElement( locator );
-            return true;
-        } catch (NoSuchElementException ex) {
-            return false;
-        }
-    }
 
 
     public Contacts all() {
@@ -176,18 +170,40 @@ public class ContactHelper extends HelperBase {
         String work = wd.findElement(By.name("work")).getAttribute( "value" );
         String address = wd.findElement(By.name("address")).getText();
         String email = wd.findElement(By.name("email")).getAttribute( "value" );
-        String email2 = wd.findElement(By.name("email2")).getAttribute( "value" );
-        String email3 = wd.findElement(By.name("email3")).getAttribute( "value" );
+        String email2=wd.findElement( By.name( "email2" ) ).getAttribute( "value" );
+        String email3=wd.findElement( By.name( "email3" ) ).getAttribute( "value" );
 
         wd.navigate().back();
-        return new ContactData().withId(contact.getId())
+        return new ContactData().withId( contact.getId() )
                 .withFirstname( firstname ).withSurname( lastname )
-                .withHomePhone(home).withMobilePhone(mobile).withWorkPhone(work)
+                .withHomePhone( home ).withMobilePhone( mobile ).withWorkPhone( work )
                 .withAddress( address )
                 .withEmail( email ).withEmail2( email2 ).withEmail3( email3 );
 
-        }
     }
+
+
+    public void selectShowGroup(String name) {
+        new Select( wd.findElement( By.name( "group" ) ) ).selectByVisibleText( name );
+    }
+
+    public void deleteFromGroup(String name) {
+        click( By.name( "remove" ) );
+    }
+
+    public void addContactToGroup(ContactData contact, GroupData group) {
+        selectContactById( contact.getId() );
+        new Select( wd.findElement( By.name( "to_group" ) ) ).selectByVisibleText( group.getName() );
+        click( By.name( "add" ) );
+    }
+
+    public void deleteContactFromGroup(ContactData contact, GroupData group) {
+        selectShowGroup( group.getName() );
+        selectContactById( contact.getId() );
+        deleteFromGroup( group.getName() );
+    }
+}
+
 
 
 

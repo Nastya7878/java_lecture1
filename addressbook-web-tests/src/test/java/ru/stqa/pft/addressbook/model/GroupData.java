@@ -5,16 +5,15 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import org.hibernate.annotations.Type;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
-@XStreamAlias( "groups" )
+@XStreamAlias( "group" )
 @Entity
 @Table(name = "group_list")
-public class GroupData {
+public class GroupData implements CharSequence {
     @XStreamOmitField
     @Id
     @Column(name = "group_id")
@@ -34,6 +33,12 @@ public class GroupData {
     @Type( type="text" )
     private  String footer;
 
+    @ManyToMany(mappedBy= "groups")
+    private Set<ContactData> contacts = new HashSet<ContactData>();
+
+    public Set<ContactData> getContacts() {
+        return contacts;
+    }
 
     public GroupData withId(int id) {
         this.id=id;
@@ -83,6 +88,21 @@ public class GroupData {
     @Override
     public int hashCode() {
         return Objects.hash( id, name );
+    }
+
+    @Override
+    public int length() {
+        return 0;
+    }
+
+    @Override
+    public char charAt(int index) {
+        return 0;
+    }
+
+    @Override
+    public CharSequence subSequence(int start, int end) {
+        return null;
     }
 
     @Override
