@@ -12,7 +12,8 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
-public class ApplicationManager {
+public class ApplicationManager  {
+
     private final Properties properties;
     private WebDriver wd;
 
@@ -20,11 +21,12 @@ public class ApplicationManager {
     private RegistrationHelper registrationHelper;
     private FtpHelper ftp;
     private MailHelper mailHelper;
+    private JamesHelper jamesHelper;
 
 
     public ApplicationManager(String browser) {
-        this.browser = browser;
-        properties = new Properties();
+        this.browser=browser;
+        properties=new Properties();
     }
 
     public void init() throws IOException {
@@ -39,20 +41,20 @@ public class ApplicationManager {
     }
 
     public HttpSession newSession() {
-        return new HttpSession (this);
+        return new HttpSession( this );
     }
 
     public String getProperty(String key) {
-        return properties.getProperty(key);
+        return properties.getProperty( key );
 
     }
 
     public RegistrationHelper registration() {
         if (registrationHelper == null) {
-            registrationHelper= new RegistrationHelper( this );
-            }
-            return registrationHelper;
+            registrationHelper=new RegistrationHelper( this );
         }
+        return registrationHelper;
+    }
 
     public FtpHelper ftp() {
         if (ftp == null) {
@@ -62,7 +64,7 @@ public class ApplicationManager {
     }
 
     public WebDriver getDriver() {
-        if ( wd== null) {
+        if (wd == null) {
             if (browser.equals( BrowserType.FIREFOX )) {
                 wd=new FirefoxDriver();
             } else if (browser.equals( BrowserType.CHROME )) {
@@ -77,15 +79,23 @@ public class ApplicationManager {
         return wd;
     }
 
-    public MailHelper mail () {
+    public MailHelper mail() {
         if (mailHelper == null) {
-            mailHelper = new MailHelper( this );
+            mailHelper=new MailHelper( this );
         }
         return mailHelper;
     }
 
-
+    public JamesHelper james() {
+        if (jamesHelper == null) {
+            jamesHelper=new JamesHelper( this );
+        }
+        return jamesHelper;
+    }
 }
+
+
+
 
 
 
