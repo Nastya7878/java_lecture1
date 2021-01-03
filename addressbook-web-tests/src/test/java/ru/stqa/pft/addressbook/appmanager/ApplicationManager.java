@@ -34,8 +34,8 @@ public class ApplicationManager {
     }
 
     public void init() throws IOException {
-        String target=System.getProperty( "target", "local" );
-        properties.load( new FileReader( new File( String.format( "src/test/resources/%s.properties", target ) ) ) );
+        String target = System.getProperty("target", "local");
+        properties.load( new FileReader( new File( String.format( "D:/PGI/Autotest/Develop/java_pft/addressbook-web-tests/src/test/resources/%s.properties", target) ) ) );
 
         dbHelper=new DbHelper();
 
@@ -61,19 +61,15 @@ public class ApplicationManager {
         sessionHelper.login( properties.getProperty( "web.adminLogin" ), properties.getProperty( "web.adminPassword" ) );
     }
 
-
     public void stop() {
         wd.quit();
     }
 
-
     public GroupHelper group() {
-
         return groupHelper;
     }
 
     public NavigationHelper goTo() {
-
         return navigationHelper;
     }
 
@@ -84,7 +80,6 @@ public class ApplicationManager {
     public DbHelper db() {
         return dbHelper;
     }
-
 }
 
 
